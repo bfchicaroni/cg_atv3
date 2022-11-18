@@ -37,7 +37,8 @@ private:
   glm::mat4 m_viewMatrix{1.0f};
   glm::mat4 m_projMatrix{1.0f};
 
-  Planet mercurio;
+  Planet sun;
+  Planet mercury;
 };
 
 #endif

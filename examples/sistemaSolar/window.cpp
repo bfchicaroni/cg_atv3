@@ -62,7 +62,8 @@ void Window::onCreate() {
   abcg::glEnable(GL_PROGRAM_POINT_SIZE);
 #endif
 
-  mercurio.create(m_program, assetsPath);
+  sun.create(m_program, assetsPath);
+  mercury.create(m_program, assetsPath);
 }
 
 void Window::onPaint() {
@@ -79,7 +80,10 @@ void Window::onPaint() {
   abcg::glUniformMatrix4fv(m_projMatrixLocation, 1, GL_FALSE,
                            &m_camera.getProjMatrix()[0][0]);
 
-  mercurio.paint();
+  glm::vec3 pos(0.0f, 0.0f, 0.0f);
+  sun.paint(1.0f, 0.8f, 0.0f, 1.0f, 0.4f, pos);
+  pos.x = 2.5f;
+  mercury.paint(0.9f, 0.9f, 0.9f, 1.0f, 0.1f, pos);
 
   abcg::glUseProgram(0);
 }
@@ -97,6 +101,8 @@ void Window::onDestroy() {
   abcg::glDeleteBuffers(1, &m_EBO);
   abcg::glDeleteBuffers(1, &m_VBO);
   abcg::glDeleteVertexArrays(1, &m_VAO);
+  sun.destroy();
+  mercury.destroy();
 }
 
 void Window::onUpdate() {

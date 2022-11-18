@@ -16,7 +16,8 @@ struct Vertex {
 class Planet {
 public:
   void create(GLuint program, std::string assetsPath);
-  void paint();
+  void paint(float colorR, float colorG, float colorB, float colorA, float size,
+             glm::vec3 position);
   void destroy();
   void update();
 
