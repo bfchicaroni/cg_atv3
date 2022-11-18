@@ -15,11 +15,11 @@ struct Vertex {
 
 class Planet {
 public:
-  void create(GLuint program, std::string assetsPath);
-  void paint(float colorR, float colorG, float colorB, float colorA, float size,
-             glm::vec3 position);
+  void create(GLuint program, std::string assetsPath, float size,
+              glm::vec3 position, glm::vec4 color);
+  void paint();
   void destroy();
-  void update();
+  void update(float deltaTime);
 
   GLuint m_VAO{};
   GLuint m_VBO{};

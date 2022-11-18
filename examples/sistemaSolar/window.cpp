@@ -62,8 +62,10 @@ void Window::onCreate() {
   abcg::glEnable(GL_PROGRAM_POINT_SIZE);
 #endif
 
-  sun.create(m_program, assetsPath);
-  mercury.create(m_program, assetsPath);
+  sun.create(m_program, assetsPath, 0.4f, {0.0f, 0.0f, 0.0f},
+             {1.0f, 0.8f, 0.0f, 1.0f});
+  mercury.create(m_program, assetsPath, 0.1f, {2.5f, 0.0f, 0.0f},
+                 {0.9f, 0.9f, 0.9f, 1.0f});
 }
 
 void Window::onPaint() {
@@ -80,10 +82,8 @@ void Window::onPaint() {
   abcg::glUniformMatrix4fv(m_projMatrixLocation, 1, GL_FALSE,
                            &m_camera.getProjMatrix()[0][0]);
 
-  glm::vec3 pos(0.0f, 0.0f, 0.0f);
-  sun.paint(1.0f, 0.8f, 0.0f, 1.0f, 0.4f, pos);
-  pos.x = 2.5f;
-  mercury.paint(0.9f, 0.9f, 0.9f, 1.0f, 0.1f, pos);
+  sun.paint();
+  mercury.paint();
 
   abcg::glUseProgram(0);
 }
@@ -107,6 +107,8 @@ void Window::onDestroy() {
 
 void Window::onUpdate() {
   auto const deltaTime{gsl::narrow_cast<float>(getDeltaTime())};
+
+  mercury.update(deltaTime);
 
   // Update camera
   m_camera.dolly(m_dollySpeed * deltaTime);

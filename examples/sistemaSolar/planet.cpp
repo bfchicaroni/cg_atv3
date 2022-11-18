@@ -11,7 +11,8 @@ template <> struct std::hash<Vertex> {
   }
 };
 
-void Planet::create(GLuint program, std::string assetsPath) {
+void Planet::create(GLuint program, std::string assetsPath, float size,
+                    glm::vec3 position, glm::vec4 color) {
   destroy();
 
   m_program = program;
@@ -21,9 +22,10 @@ void Planet::create(GLuint program, std::string assetsPath) {
   m_translationLoc = abcg::glGetUniformLocation(m_program, "translation");
   m_modelMatrixLoc = abcg::glGetUniformLocation(m_program, "modelMatrix");
 
-  m_translation = glm::vec3(7.0f, 0.0f, 0.0f);
-  m_color = glm::vec4(0.9f, 0.9f, 0.9f, 1.0f);
-  m_velocity = glm::vec3(0, 0, 0);
+  m_translation = position;
+  m_scale = size;
+  m_color = color;
+  m_velocity = glm::vec3(0.5, 0, 0);
 
   // Load model
   loadModelFromFile(assetsPath + "sphere.obj");
@@ -116,19 +118,17 @@ void Planet::loadModelFromFile(std::string_view path) {
   }
 }
 
-void Planet::paint(float colorR, float colorG, float colorB, float colorA,
-                   float size, glm::vec3 position) {
+void Planet::paint() {
   abcg::glUseProgram(m_program);
 
   abcg::glBindVertexArray(m_VAO);
 
   glm::mat4 model{1.0f};
-  model = glm::mat4(1.0);
-  model = glm::translate(model, position);
-  model = glm::scale(model, glm::vec3(size));
+  model = glm::translate(model, m_translation);
+  model = glm::scale(model, glm::vec3(m_scale));
 
   abcg::glUniformMatrix4fv(m_modelMatrixLoc, 1, GL_FALSE, &model[0][0]);
-  abcg::glUniform4f(m_colorLoc, colorR, colorG, colorB, colorA);
+  abcg::glUniform4f(m_colorLoc, m_color.r, m_color.g, m_color.b, m_color.a);
   abcg::glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT,
                        nullptr);
 
@@ -143,4 +143,6 @@ void Planet::destroy() {
   abcg::glDeleteVertexArrays(1, &m_VAO);
 }
 
-void Planet::update() {}
+void Planet::update(float deltaTime) {
+  m_translation -= m_velocity * deltaTime;
+}
