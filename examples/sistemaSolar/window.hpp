@@ -4,12 +4,7 @@
 #include "abcgOpenGL.hpp"
 
 #include "camera.hpp"
-
-struct Vertex {
-  glm::vec3 position;
-
-  friend bool operator==(Vertex const &, Vertex const &) = default;
-};
+#include "planet.hpp"
 
 class Window : public abcg::OpenGLWindow {
 protected:
@@ -39,10 +34,10 @@ private:
   float m_truckSpeed{};
   float m_panSpeed{};
 
-  std::vector<Vertex> m_vertices;
-  std::vector<GLuint> m_indices;
+  glm::mat4 m_viewMatrix{1.0f};
+  glm::mat4 m_projMatrix{1.0f};
 
-  void loadModelFromFile(std::string_view path);
+  Planet mercurio;
 };
 
 #endif
