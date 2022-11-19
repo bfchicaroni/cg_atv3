@@ -61,11 +61,41 @@ void Window::onCreate() {
 #if !defined(__EMSCRIPTEN__)
   abcg::glEnable(GL_PROGRAM_POINT_SIZE);
 #endif
+  // SUN
+  sun.create(m_program, assetsPath, 0.5f, {0.0f, 0.0f, 0.0f},
+             {1.0f, 1.0f, 0.0f, 1.0f}, 0.0f);
 
-  sun.create(m_program, assetsPath, 0.4f, {0.0f, 0.0f, 0.0f},
-             {1.0f, 0.8f, 0.0f, 1.0f}, 0.0f);
-  mercury.create(m_program, assetsPath, 0.1f, {2.5f, 0.0f, 0.0f},
-                 {0.9f, 0.9f, 0.9f, 1.0f}, 0.05f);
+  // MERCURY
+  mercury.create(m_program, assetsPath, 0.003f, {2.5f, 0.0f, 0.0f},
+                 {0.5f, 0.5f, 0.5f, 1.0f}, 0.08f);
+
+  // VENUS
+  venus.create(m_program, assetsPath, 0.009f, {3.5f, 0.0f, 0.0f},
+               {1.0f, 0.8f, 0.4f, 1.0f}, 0.07f);
+
+  // EARTH
+  earth.create(m_program, assetsPath, 0.01f, {4.5f, 0.0f, 0.0f},
+               {0.0f, 0.0f, 1.0f, 0.8f}, 0.06f);
+
+  // MARS
+  mars.create(m_program, assetsPath, 0.006f, {5.5f, 0.0f, 0.0f},
+              {1.0f, 0.0f, 0.0f, 0.7f}, 0.05f);
+
+  // JUPITER
+  jupiter.create(m_program, assetsPath, 0.2f, {6.5f, 0.0f, 0.0f},
+                 {0.8f, 0.4f, 0.0f, 1.0f}, 0.04f);
+
+  // SATURN
+  saturn.create(m_program, assetsPath, 0.15f, {7.5f, 0.0f, 0.0f},
+                {0.8f, 0.6f, 0.4f, 1.0f}, 0.03f);
+
+  // URANUS
+  uranus.create(m_program, assetsPath, 0.1f, {8.5f, 0.0f, 0.0f},
+                {0.6f, 0.8f, 0.8f, 0.5f}, 0.02f);
+
+  // NEPTUNE
+  neptune.create(m_program, assetsPath, 0.11f, {9.5f, 0.0f, 0.0f},
+                 {0.0f, 0.4f, 0.8f, 1.0f}, 0.01f);
 }
 
 void Window::onPaint() {
@@ -83,6 +113,13 @@ void Window::onPaint() {
 
   sun.paint();
   mercury.paint();
+  venus.paint();
+  earth.paint();
+  mars.paint();
+  jupiter.paint();
+  saturn.paint();
+  uranus.paint();
+  neptune.paint();
 
   abcg::glUseProgram(0);
 }
@@ -101,12 +138,26 @@ void Window::onDestroy() {
   abcg::glDeleteVertexArrays(1, &m_VAO);
   sun.destroy();
   mercury.destroy();
+  venus.destroy();
+  earth.destroy();
+  mars.destroy();
+  jupiter.destroy();
+  saturn.destroy();
+  uranus.destroy();
+  neptune.destroy();
 }
 
 void Window::onUpdate() {
   auto const deltaTime{gsl::narrow_cast<float>(getDeltaTime())};
 
   mercury.update();
+  venus.update();
+  earth.update();
+  mars.update();
+  jupiter.update();
+  saturn.update();
+  uranus.update();
+  neptune.update();
 
   // Update camera
   m_camera.dolly(m_dollySpeed * deltaTime);

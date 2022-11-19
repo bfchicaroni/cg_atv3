@@ -39,6 +39,13 @@ private:
 
   Planet sun;
   Planet mercury;
+  Planet venus;
+  Planet earth;
+  Planet mars;
+  Planet jupiter;
+  Planet saturn;
+  Planet uranus;
+  Planet neptune;
 };
 
 #endif
