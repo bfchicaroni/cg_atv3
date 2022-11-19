@@ -20,20 +20,23 @@ RA 11201810655
   * [X] Saturno;
   * [X] Urano;
   * [X] Netuno;
-  * [] Luas;
-  * [] Aneis de Saturno;
-  * [] Universo Estrelado;
-  * [] Asteroides;
+  * [ ] Luas;
+  * [ ] Aneis de Saturno;
+  * [ ] Universo Estrelado;
+  * [ ] Asteroides;
 
 - Este projeto tem o proposito de simular:
   * [X] O comportamento de rotação dos planetas em relação ao Sol;
-  * [] O comportamento de rotação das luas dos planetas;
+  * [ ] O comportamento de rotação das luas dos planetas;
   * [X] A ideia de escala entre os tamanhos dos elementos;
   * [X] Mostrar graficamente os elementos do Sistema Solar em uma perspectiva 3D;
 
 - Para a parte da câmera virtual deste projeto, foi utilizada a câmera implementada no projeto ![LookAt](https://hbatagelo.github.io/cg/lookat.html);
 
 - Para simular o efeito de rotação dos planetas em relação ao Sol utilizamos dos conceitos de ![Movimento Circular Uniforme](https://wp.ufpel.edu.br/diehl/files/2018/08/FGA_aula6.pdf) aplicando uma velocidade angular constante parametrizada para cada planeta, e o conceito de ![Coordenadas Polares](http://wwwp.fc.unesp.br/~mauri/Down/Polares.pdf) para obter as coordenadas cartesianas na função update().
+
+- Ideia da escala entre os planetas:
+ <img src="https://github.com/bfchicaroni/cg_atv3/blob/finishingplanets/examples/sistemaSolar/assets/1200px-Size_planets_comparison.jpg" width="600" height="600">
 
 
 
