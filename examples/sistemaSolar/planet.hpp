@@ -16,10 +16,10 @@ struct Vertex {
 class Planet {
 public:
   void create(GLuint program, std::string assetsPath, float size,
-              glm::vec3 position, glm::vec4 color);
+              glm::vec3 position, glm::vec4 color, float angularVelocity);
   void paint();
   void destroy();
-  void update(float deltaTime);
+  void update();
 
   GLuint m_VAO{};
   GLuint m_VBO{};
@@ -29,6 +29,7 @@ public:
   float m_scale{};
   glm::vec3 m_translation{};
   glm::vec3 m_velocity{};
+  float m_angularVelocity{};
 
 private:
   GLuint m_program{};

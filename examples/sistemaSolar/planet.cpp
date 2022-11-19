@@ -1,5 +1,6 @@
 #include "planet.hpp"
 
+#include <cstdio>
 #include <glm/gtx/fast_trigonometry.hpp>
 #include <unordered_map>
 
@@ -12,7 +13,8 @@ template <> struct std::hash<Vertex> {
 };
 
 void Planet::create(GLuint program, std::string assetsPath, float size,
-                    glm::vec3 position, glm::vec4 color) {
+                    glm::vec3 position, glm::vec4 color,
+                    float angularVelocity) {
   destroy();
 
   m_program = program;
@@ -26,6 +28,7 @@ void Planet::create(GLuint program, std::string assetsPath, float size,
   m_scale = size;
   m_color = color;
   m_velocity = glm::vec3(0.5, 0, 0);
+  m_angularVelocity = angularVelocity;
 
   // Load model
   loadModelFromFile(assetsPath + "sphere.obj");
@@ -143,6 +146,12 @@ void Planet::destroy() {
   abcg::glDeleteVertexArrays(1, &m_VAO);
 }
 
-void Planet::update(float deltaTime) {
-  m_translation -= m_velocity * deltaTime;
+void Planet::update() {
+  const double PI = 3.141592653589793238463;
+  float x = m_translation.x * cos(PI * m_angularVelocity / 180) -
+            m_translation.z * sin(PI * m_angularVelocity / 180);
+  float z = m_translation.z * cos(PI * m_angularVelocity / 180) +
+            m_translation.x * sin(PI * m_angularVelocity / 180);
+
+  m_translation = glm::vec3{x, 0.0f, z};
 }

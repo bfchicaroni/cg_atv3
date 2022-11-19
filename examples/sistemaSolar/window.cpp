@@ -63,13 +63,12 @@ void Window::onCreate() {
 #endif
 
   sun.create(m_program, assetsPath, 0.4f, {0.0f, 0.0f, 0.0f},
-             {1.0f, 0.8f, 0.0f, 1.0f});
+             {1.0f, 0.8f, 0.0f, 1.0f}, 0.0f);
   mercury.create(m_program, assetsPath, 0.1f, {2.5f, 0.0f, 0.0f},
-                 {0.9f, 0.9f, 0.9f, 1.0f});
+                 {0.9f, 0.9f, 0.9f, 1.0f}, 0.05f);
 }
 
 void Window::onPaint() {
-
   abcg::glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   abcg::glViewport(0, 0, m_viewportSize.x, m_viewportSize.y);
@@ -96,7 +95,6 @@ void Window::onResize(glm::ivec2 const &size) {
 }
 
 void Window::onDestroy() {
-
   abcg::glDeleteProgram(m_program);
   abcg::glDeleteBuffers(1, &m_EBO);
   abcg::glDeleteBuffers(1, &m_VBO);
@@ -108,7 +106,7 @@ void Window::onDestroy() {
 void Window::onUpdate() {
   auto const deltaTime{gsl::narrow_cast<float>(getDeltaTime())};
 
-  mercury.update(deltaTime);
+  mercury.update();
 
   // Update camera
   m_camera.dolly(m_dollySpeed * deltaTime);
