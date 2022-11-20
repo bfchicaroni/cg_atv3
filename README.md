@@ -35,6 +35,58 @@ Nome: Thais Amorim Souza
 
 - O objeto original ```sphere.obj```, que foi utilizado para representar todos os planetas e o Sol, está disponível [neste link](http://web.mit.edu/djwendel/www/weblogo/shapes/basic-shapes/sphere/sphere.obj) ;
 
+
+ - A definição da classe ```window.hpp``` permanece similar ao que estudamos na sala de aula, com o adendo de algumas variaveis novas como as referente aos planetas e o Sol:
+  ```c++
+  #ifndef WINDOW_HPP_
+#define WINDOW_HPP_
+
+#include "abcgOpenGL.hpp"
+
+#include "camera.hpp"
+#include "planet.hpp"
+
+class Window : public abcg::OpenGLWindow {
+protected:
+  void onEvent(SDL_Event const &event) override;
+  void onCreate() override;
+  void onPaint() override;
+  void onPaintUI() override;
+  void onResize(glm::ivec2 const &size) override;
+  void onDestroy() override;
+  void onUpdate() override;
+
+private:
+  glm::ivec2 m_viewportSize{};
+
+  GLuint m_VAO{};
+  GLuint m_VBO{};
+  GLuint m_EBO{};
+  GLuint m_program{};
+
+  GLint m_viewMatrixLocation{};
+  GLint m_projMatrixLocation{};
+  GLint m_colorLocation{};
+
+  Camera m_camera;
+  float m_dollySpeed{};
+  float m_truckSpeed{};
+  float m_panSpeed{};
+
+  Planet sun;
+  Planet mercury;
+  Planet venus;
+  Planet earth;
+  Planet mars;
+  Planet jupiter;
+  Planet saturn;
+  Planet uranus;
+  Planet neptune;
+};
+
+#endif
+  ```
+
 - Para a parte da câmera virtual deste projeto, foi utilizada a câmera implementada no projeto [LookAt](https://hbatagelo.github.io/cg/lookat.html) incluindo os comandos de controle da câmera com o teclado. A classe câmera está implementada nos arquivos ```camera.hpp``` e ```camera.cpp```. O controle da câmera com o teclado está instanciado na classe ```Window.cpp``` nas linhas exibidas a seguir:
  ```c++
  void Window::onEvent(SDL_Event const &event) {
@@ -73,7 +125,86 @@ Nome: Thais Amorim Souza
   }
 }
  ```
- 
+ - Todos os planetas e o Sol são criados na função ```void Window::onCreate()```; sendo passado parametros como escala do [sphere.obj](http://web.mit.edu/djwendel/www/weblogo/shapes/basic-shapes/sphere/sphere.obj), cores dos objetos e suas respectivas velocidades angulares, na classe ```window.cpp```:
+  ```c++
+  // SUN
+  sun.create(m_program, assetsPath, 0.5f, {0.0f, 0.0f, 0.0f},
+             {1.0f, 1.0f, 0.0f, 1.0f}, 0.0f);
+
+  // MERCURY
+  mercury.create(m_program, assetsPath, 0.003f, {2.5f, 0.0f, 0.0f},
+                 {0.5f, 0.5f, 0.5f, 1.0f}, 0.8f);
+
+  // VENUS
+  venus.create(m_program, assetsPath, 0.009f, {3.5f, 0.0f, 0.0f},
+               {1.0f, 0.8f, 0.4f, 1.0f}, 0.7f);
+ // EARTH
+  earth.create(m_program, assetsPath, 0.01f, {4.5f, 0.0f, 0.0f},
+               {0.0f, 0.0f, 1.0f, 0.8f}, 0.6f);
+
+  // MARS
+  mars.create(m_program, assetsPath, 0.006f, {5.5f, 0.0f, 0.0f},
+              {1.0f, 0.0f, 0.0f, 0.7f}, 0.5f);
+
+  // JUPITER
+  jupiter.create(m_program, assetsPath, 0.2f, {6.5f, 0.0f, 0.0f},
+                 {0.8f, 0.4f, 0.0f, 1.0f}, 0.4f);
+
+  // SATURN
+  saturn.create(m_program, assetsPath, 0.15f, {7.5f, 0.0f, 0.0f},
+                {0.8f, 0.6f, 0.4f, 1.0f}, 0.3f);
+
+  // URANUS
+  uranus.create(m_program, assetsPath, 0.1f, {8.5f, 0.0f, 0.0f},
+                {0.6f, 0.8f, 0.8f, 0.5f}, 0.2f);
+
+  // NEPTUNE
+  neptune.create(m_program, assetsPath, 0.11f, {9.5f, 0.0f, 0.0f},
+                {0.0f, 0.4f, 0.8f, 1.0f}, 0.1f);
+  ```
+ - Na função ```void Window::onPaint()``` da classe ```window.cpp``` sao chamadas as funções ```paint()``` dos planetas e Sol para pintar as esferas referente a eles:
+  ```c++
+  sun.paint();
+  mercury.paint();
+  venus.paint();
+  earth.paint();
+  mars.paint();
+  jupiter.paint();
+  saturn.paint();
+  uranus.paint();
+  neptune.paint();
+  ```
+ - Na função ```void Window::onDestroy()``` da classe ```window.cpp``` sao chamadas as funções ```destroy()``` dos planetas e Sol para destruir as esferas referente a eles:
+  ```c++
+  sun.destroy();
+  mercury.destroy();
+  venus.destroy();
+  earth.destroy();
+  mars.destroy();
+  jupiter.destroy();
+  saturn.destroy();
+  uranus.destroy();
+  neptune.destroy();
+  ```
+ - Na função ```void Window::onUpdate()``` da classe ```window.cpp``` sao chamadas as funções ```update()``` dos planetas e Sol para atualizar as esferas referente a eles:
+  ```c++
+  mercury.update();
+  venus.update();
+  earth.update();
+  mars.update();
+  jupiter.update();
+  saturn.update();
+  uranus.update();
+  neptune.update();
+  ```
+ - A câmera é atualizada nesse mesmo bloco:
+  ```c++
+  // Update camera
+  m_camera.dolly(m_dollySpeed * deltaTime);
+  m_camera.truck(m_truckSpeed * deltaTime);
+  m_camera.pan(m_panSpeed * deltaTime);
+  ```
+  
 - As classes ```planet.hpp``` e ```planet.cpp``` foram criadas para abstrair a configuração dos planetas e as funções referentes ao planetas:
 
  - ```planet.hpp```:
@@ -289,136 +420,6 @@ void Planet::update() {
 
   m_translation = glm::vec3{x, 0.0f, z};
 }
-  ```
- - Todos os planetas e o Sol são criados na função ```void Window::onCreate()```; sendo passado parametros como escala do [sphere.obj](http://web.mit.edu/djwendel/www/weblogo/shapes/basic-shapes/sphere/sphere.obj), cores dos objetos e suas respectivas velocidades angulares, na classe ```window.cpp```:
-  ```c++
-  // SUN
-  sun.create(m_program, assetsPath, 0.5f, {0.0f, 0.0f, 0.0f},
-             {1.0f, 1.0f, 0.0f, 1.0f}, 0.0f);
-
-  // MERCURY
-  mercury.create(m_program, assetsPath, 0.003f, {2.5f, 0.0f, 0.0f},
-                 {0.5f, 0.5f, 0.5f, 1.0f}, 0.8f);
-
-  // VENUS
-  venus.create(m_program, assetsPath, 0.009f, {3.5f, 0.0f, 0.0f},
-               {1.0f, 0.8f, 0.4f, 1.0f}, 0.7f);
-
-  // EARTH
-  earth.create(m_program, assetsPath, 0.01f, {4.5f, 0.0f, 0.0f},
-               {0.0f, 0.0f, 1.0f, 0.8f}, 0.6f);
-
-  // MARS
-  mars.create(m_program, assetsPath, 0.006f, {5.5f, 0.0f, 0.0f},
-              {1.0f, 0.0f, 0.0f, 0.7f}, 0.5f);
-
-  // JUPITER
-  jupiter.create(m_program, assetsPath, 0.2f, {6.5f, 0.0f, 0.0f},
-                 {0.8f, 0.4f, 0.0f, 1.0f}, 0.4f);
-
-  // SATURN
-  saturn.create(m_program, assetsPath, 0.15f, {7.5f, 0.0f, 0.0f},
-                {0.8f, 0.6f, 0.4f, 1.0f}, 0.3f);
-
-  // URANUS
-  uranus.create(m_program, assetsPath, 0.1f, {8.5f, 0.0f, 0.0f},
-                {0.6f, 0.8f, 0.8f, 0.5f}, 0.2f);
-
-  // NEPTUNE
-  neptune.create(m_program, assetsPath, 0.11f, {9.5f, 0.0f, 0.0f},
-                 {0.0f, 0.4f, 0.8f, 1.0f}, 0.1f);
-  ```
- - Na função ```void Window::onPaint()``` da classe ```window.cpp``` sao chamadas as funções ```paint()``` dos planetas e Sol para pintar as esferas referente a eles:
-  ```c++
-  sun.paint();
-  mercury.paint();
-  venus.paint();
-  earth.paint();
-  mars.paint();
-  jupiter.paint();
-  saturn.paint();
-  uranus.paint();
-  neptune.paint();
-  ```
- - Na função ```void Window::onDestroy()``` da classe ```window.cpp``` sao chamadas as funções ```destroy()``` dos planetas e Sol para destruir as esferas referente a eles:
-  ```c++
-  sun.destroy();
-  mercury.destroy();
-  venus.destroy();
-  earth.destroy();
-  mars.destroy();
-  jupiter.destroy();
-  saturn.destroy();
-  uranus.destroy();
-  neptune.destroy();
-  ```
- - Na função ```void Window::onUpdate()``` da classe ```window.cpp``` sao chamadas as funções ```update()``` dos planetas e Sol para atualizar as esferas referente a eles:
-  ```c++
-  mercury.update();
-  venus.update();
-  earth.update();
-  mars.update();
-  jupiter.update();
-  saturn.update();
-  uranus.update();
-  neptune.update();
-  ```
- - A câmera acaba sendo atualizada nesse mesmo bloco:
-  ```c++
-  // Update camera
-  m_camera.dolly(m_dollySpeed * deltaTime);
-  m_camera.truck(m_truckSpeed * deltaTime);
-  m_camera.pan(m_panSpeed * deltaTime);
-  ```
- - A definição da classe ```window.hpp``` permanece similar ao que estudamos na sala de aula, com o adendo de algumas variaveis novas como as referente aos planetas e o Sol:
-  ```c++
-  #ifndef WINDOW_HPP_
-#define WINDOW_HPP_
-
-#include "abcgOpenGL.hpp"
-
-#include "camera.hpp"
-#include "planet.hpp"
-
-class Window : public abcg::OpenGLWindow {
-protected:
-  void onEvent(SDL_Event const &event) override;
-  void onCreate() override;
-  void onPaint() override;
-  void onPaintUI() override;
-  void onResize(glm::ivec2 const &size) override;
-  void onDestroy() override;
-  void onUpdate() override;
-
-private:
-  glm::ivec2 m_viewportSize{};
-
-  GLuint m_VAO{};
-  GLuint m_VBO{};
-  GLuint m_EBO{};
-  GLuint m_program{};
-
-  GLint m_viewMatrixLocation{};
-  GLint m_projMatrixLocation{};
-  GLint m_colorLocation{};
-
-  Camera m_camera;
-  float m_dollySpeed{};
-  float m_truckSpeed{};
-  float m_panSpeed{};
-
-  Planet sun;
-  Planet mercury;
-  Planet venus;
-  Planet earth;
-  Planet mars;
-  Planet jupiter;
-  Planet saturn;
-  Planet uranus;
-  Planet neptune;
-};
-
-#endif
   ```
 
 - Para simular o efeito de rotação dos planetas em relação ao Sol utilizamos dos conceitos de [Movimento Circular Uniforme](https://wp.ufpel.edu.br/diehl/files/2018/08/FGA_aula6.pdf) aplicando uma velocidade angular constante parametrizada para cada planeta, e o conceito de [Transformações](https://hbatagelo.github.io/cg/transforms.html) para obter as coordenadas cartesianas atualizadas no movimento de Rotação dos planetas na função ```update()``` na classe ```planet.cpp```.
