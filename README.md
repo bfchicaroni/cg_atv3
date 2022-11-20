@@ -206,7 +206,9 @@ private:
   m_camera.pan(m_panSpeed * deltaTime);
   ```
   
-- A classe ```Planet``` foi criada para abstrair a configuração dos planetas e as funções referentes aos planetas. O arquivo ```planet.hpp``` contém a estrutura da classe ```Planet```, que possui essencialmente as funções ```create()```, ```paint()```, ```destroy()``` e ```update()```, e os atributos cor (m_color), tamanho (m_scale), posição (m_translate), velocidade (m_velocity), velocidade angular (m_angularVelocity) e escala (m_sceneScale).
+  #### Classe Planet
+- A classe ```Planet``` foi criada para abstrair a configuração dos planetas e as funções referentes aos planetas. 
+- O arquivo ```planet.hpp``` contém a estrutura da classe ```Planet```, que possui essencialmente as funções ```create()```, ```paint()```, ```destroy()``` e ```update()```, e os atributos cor (m_color), tamanho (m_scale), posição (m_translate), velocidade (m_velocity), velocidade angular (m_angularVelocity) e escala (m_sceneScale).
 
 ```c++
 #ifndef PLANET_HPP_
@@ -291,8 +293,9 @@ void Planet::create(GLuint program, std::string assetsPath, float size,
 }
 ```
 
-- A função ```loadModelFromFile``` da classe ```Planet``` é idêntica à função de mesmo nome do projeto [LookAt](https://hbatagelo.github.io/cg/lookat.html) visto em sala de aula;
+- A função ```loadModelFromFile()``` da classe ```Planet``` é idêntica à função de mesmo nome do projeto [LookAt](https://hbatagelo.github.io/cg/lookat.html) visto em sala de aula;
 
+- A função ```paint()``` é responsável por desenhar a instância do planeta na posição, escala, e cor correspondentes.
  ```c++
 void Planet::paint() {
   abcg::glUseProgram(m_program);
@@ -317,7 +320,7 @@ void Planet::paint() {
 }
   ```
 
-- Para simular o efeito de rotação dos planetas em relação ao Sol utilizamos dos conceitos de [Movimento Circular Uniforme](https://wp.ufpel.edu.br/diehl/files/2018/08/FGA_aula6.pdf) aplicando uma velocidade angular constante parametrizada para cada planeta, e o conceito de [Transformações](https://hbatagelo.github.io/cg/transforms.html) para obter as coordenadas cartesianas atualizadas no movimento de Rotação dos planetas na função ```update()``` na classe ```planet.cpp```.
+- Para simular o efeito de rotação dos planetas em relação ao Sol utilizamos dos conceitos de [Movimento Circular Uniforme](https://wp.ufpel.edu.br/diehl/files/2018/08/FGA_aula6.pdf) aplicando uma velocidade angular constante parametrizada para cada planeta, e o conceito de [Transformações](https://hbatagelo.github.io/cg/transforms.html) para obter as coordenadas cartesianas atualizadas no movimento de Rotação dos planetas na função ```update()``.
  ```c++
  void Planet::update() {
   const double PI = 3.141592653589793238463;
