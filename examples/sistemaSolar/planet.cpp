@@ -127,8 +127,11 @@ void Planet::paint() {
   abcg::glBindVertexArray(m_VAO);
 
   glm::mat4 model{1.0f};
-  model = glm::translate(model, m_translation);
-  model = glm::scale(model, glm::vec3(m_scale));
+  glm::vec3 translate = {m_sceneScale * m_translation.x,
+                         m_sceneScale * m_translation.y,
+                         m_sceneScale * m_translation.z};
+  model = glm::translate(model, translate);
+  model = glm::scale(model, glm::vec3(m_sceneScale * m_scale));
 
   abcg::glUniformMatrix4fv(m_modelMatrixLoc, 1, GL_FALSE, &model[0][0]);
   abcg::glUniform4f(m_colorLoc, m_color.r, m_color.g, m_color.b, m_color.a);

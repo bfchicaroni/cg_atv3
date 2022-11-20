@@ -67,35 +67,35 @@ void Window::onCreate() {
 
   // MERCURY
   mercury.create(m_program, assetsPath, 0.003f, {2.5f, 0.0f, 0.0f},
-                 {0.5f, 0.5f, 0.5f, 1.0f}, 0.08f);
+                 {0.5f, 0.5f, 0.5f, 1.0f}, 0.8f);
 
   // VENUS
   venus.create(m_program, assetsPath, 0.009f, {3.5f, 0.0f, 0.0f},
-               {1.0f, 0.8f, 0.4f, 1.0f}, 0.07f);
+               {1.0f, 0.8f, 0.4f, 1.0f}, 0.7f);
 
   // EARTH
   earth.create(m_program, assetsPath, 0.01f, {4.5f, 0.0f, 0.0f},
-               {0.0f, 0.0f, 1.0f, 0.8f}, 0.06f);
+               {0.0f, 0.0f, 1.0f, 0.8f}, 0.6f);
 
   // MARS
   mars.create(m_program, assetsPath, 0.006f, {5.5f, 0.0f, 0.0f},
-              {1.0f, 0.0f, 0.0f, 0.7f}, 0.05f);
+              {1.0f, 0.0f, 0.0f, 0.7f}, 0.5f);
 
   // JUPITER
   jupiter.create(m_program, assetsPath, 0.2f, {6.5f, 0.0f, 0.0f},
-                 {0.8f, 0.4f, 0.0f, 1.0f}, 0.04f);
+                 {0.8f, 0.4f, 0.0f, 1.0f}, 0.4f);
 
   // SATURN
   saturn.create(m_program, assetsPath, 0.15f, {7.5f, 0.0f, 0.0f},
-                {0.8f, 0.6f, 0.4f, 1.0f}, 0.03f);
+                {0.8f, 0.6f, 0.4f, 1.0f}, 0.3f);
 
   // URANUS
   uranus.create(m_program, assetsPath, 0.1f, {8.5f, 0.0f, 0.0f},
-                {0.6f, 0.8f, 0.8f, 0.5f}, 0.02f);
+                {0.6f, 0.8f, 0.8f, 0.5f}, 0.2f);
 
   // NEPTUNE
   neptune.create(m_program, assetsPath, 0.11f, {9.5f, 0.0f, 0.0f},
-                 {0.0f, 0.4f, 0.8f, 1.0f}, 0.01f);
+                 {0.0f, 0.4f, 0.8f, 1.0f}, 0.1f);
 }
 
 void Window::onPaint() {
