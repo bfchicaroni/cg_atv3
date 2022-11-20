@@ -26,16 +26,12 @@ private:
 
   GLint m_viewMatrixLocation{};
   GLint m_projMatrixLocation{};
-  GLint m_modelMatrixLocation{};
   GLint m_colorLocation{};
 
   Camera m_camera;
   float m_dollySpeed{};
   float m_truckSpeed{};
   float m_panSpeed{};
-
-  glm::mat4 m_viewMatrix{1.0f};
-  glm::mat4 m_projMatrix{1.0f};
 
   Planet sun;
   Planet mercury;
