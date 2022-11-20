@@ -208,8 +208,8 @@ private:
   
 - A classe ```Planet``` foi criada para abstrair a configuração dos planetas e as funções referentes aos planetas. O arquivo ```planet.hpp``` contém a estrutura da classe ```Planet```, que possui essencialmente as funções ```create()```, ```paint()```, ```destroy()``` e ```update()```, e os atributos cor (m_color), tamanho (m_scale), posição (m_translate), velocidade (m_velocity), velocidade angular (m_angularVelocity) e escala (m_sceneScale).
 
-  ```c++
-  #ifndef PLANET_HPP_
+```c++
+#ifndef PLANET_HPP_
 #define PLANET_HPP_
 
 #include <glm/fwd.hpp>
@@ -259,7 +259,7 @@ private:
 #endif
   ```
  
- - O arquivo ```planet.cpp``` implementa as funções da classe ```Planet```. A função ```create()``` recebe as características do planeta como parâmetros e cria uma instância da classe com as características recebidas e o modelo do objeto ```sphere.obj``` . Gera o VBO e o EBO, cria o VAO, e atribui os vértices. Nas linhas baixo estão omitidas as linhas de geraç
+ - O arquivo ```planet.cpp``` implementa as funções da classe ```Planet```. A função ```create()``` recebe as características do planeta como parâmetros e cria uma instância da classe com as características recebidas e o modelo do objeto ```sphere.obj``` . Gera o VBO e o EBO, cria o VAO, e atribui os vértices. Nas linhas abaixo estão omitidas as linhas de geração do VBO, EBO e VAO.
   ```c++
 
 void Planet::create(GLuint program, std::string assetsPath, float size,
@@ -291,9 +291,9 @@ void Planet::create(GLuint program, std::string assetsPath, float size,
 }
 ```
 
-- A função ```loadModelFromFile``` da classe ```Planet``` do projeto [LookAt](https://hbatagelo.github.io/cg/lookat.html) visto em sala de aula;
+- A função ```loadModelFromFile``` da classe ```Planet``` é idêntica à função de mesmo nome do projeto [LookAt](https://hbatagelo.github.io/cg/lookat.html) visto em sala de aula;
 
- 
+ ```c++
 void Planet::paint() {
   abcg::glUseProgram(m_program);
 
