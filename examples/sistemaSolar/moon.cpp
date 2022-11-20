@@ -1,3 +1,4 @@
+#include "moon.hpp"
 #include "planet.hpp"
 
 #include <cstdio>
@@ -5,16 +6,16 @@
 #include <unordered_map>
 
 // Explicit specialization of std::hash for Vertex
-template <> struct std::hash<Vertex> {
-  size_t operator()(Vertex const &vertex) const noexcept {
+template <> struct std::hash<VertexM> {
+  size_t operator()(VertexM const &vertex) const noexcept {
     auto const h1{std::hash<glm::vec3>()(vertex.position)};
     return h1;
   }
 };
 
-void Planet::create(GLuint program, std::string assetsPath, float size,
-                    glm::vec3 position, glm::vec4 color,
-                    float angularVelocity) {
+void Moon::create(GLuint program, std::string assetsPath, float size,
+                  Planet &planet, glm::vec4 color, float angularVelocity,
+                  float radius) {
   destroy();
 
   m_program = program;
@@ -24,10 +25,12 @@ void Planet::create(GLuint program, std::string assetsPath, float size,
   m_translationLoc = abcg::glGetUniformLocation(m_program, "translation");
   m_modelMatrixLoc = abcg::glGetUniformLocation(m_program, "modelMatrix");
 
-  m_translation = position;
+  m_planetCenter = planet.m_translation;
+  m_translation = {m_planetCenter.x + radius, m_planetCenter.y,
+                   m_planetCenter.z};
   m_scale = size;
   m_color = color;
-  m_velocity = glm::vec3(0.5, 0, 0);
+  m_velocity = glm::vec3(0.3, 0, 0);
   m_angularVelocity = angularVelocity;
 
   // Load model
@@ -60,7 +63,7 @@ void Planet::create(GLuint program, std::string assetsPath, float size,
       abcg::glGetAttribLocation(m_program, "inPosition")};
   abcg::glEnableVertexAttribArray(positionAttribute);
   abcg::glVertexAttribPointer(positionAttribute, 3, GL_FLOAT, GL_FALSE,
-                              sizeof(Vertex), nullptr);
+                              sizeof(VertexM), nullptr);
   abcg::glBindBuffer(GL_ARRAY_BUFFER, 0);
 
   abcg::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
@@ -69,7 +72,7 @@ void Planet::create(GLuint program, std::string assetsPath, float size,
   abcg::glBindVertexArray(0);
 }
 
-void Planet::loadModelFromFile(std::string_view path) {
+void Moon::loadModelFromFile(std::string_view path) {
   tinyobj::ObjReader reader;
 
   if (!reader.ParseFromFile(path.data())) {
@@ -91,7 +94,7 @@ void Planet::loadModelFromFile(std::string_view path) {
   m_indices.clear();
 
   // A key:value map with key=Vertex and value=index
-  std::unordered_map<Vertex, GLuint> hash{};
+  std::unordered_map<VertexM, GLuint> hash{};
 
   // Loop over shapes
   for (auto const &shape : shapes) {
@@ -106,7 +109,7 @@ void Planet::loadModelFromFile(std::string_view path) {
       auto const vy{attributes.vertices.at(startIndex + 1)};
       auto const vz{attributes.vertices.at(startIndex + 2)};
 
-      Vertex const vertex{.position = {vx, vy, vz}};
+      VertexM const vertex{.position = {vx, vy, vz}};
 
       // If map doesn't contain this vertex
       if (!hash.contains(vertex)) {
@@ -121,7 +124,7 @@ void Planet::loadModelFromFile(std::string_view path) {
   }
 }
 
-void Planet::paint() {
+void Moon::paint() {
   abcg::glUseProgram(m_program);
 
   abcg::glBindVertexArray(m_VAO);
@@ -143,17 +146,20 @@ void Planet::paint() {
   abcg::glUseProgram(0);
 }
 
-void Planet::destroy() {
+void Moon::destroy() {
   abcg::glDeleteBuffers(1, &m_VBO);
   abcg::glDeleteBuffers(1, &m_EBO);
   abcg::glDeleteVertexArrays(1, &m_VAO);
 }
 
-void Planet::update() {
+void Moon::update(const Planet &planet) {
   const double PI = 3.141592653589793238463;
-  float thetha = PI * m_angularVelocity / 180;
-  float x = m_translation.x * cos(thetha) - m_translation.z * sin(thetha);
-  float z = m_translation.z * cos(thetha) + m_translation.x * sin(thetha);
+  double thetha = PI * m_angularVelocity / 180;
+  float xMoon = m_translation.x - m_planetCenter.x;
+  float zMoon = m_translation.z - m_planetCenter.z;
+  float x = xMoon * cos(thetha) - zMoon * sin(thetha);
+  float z = zMoon * cos(thetha) + xMoon * sin(thetha);
+  m_planetCenter = planet.m_translation;
 
-  m_translation = glm::vec3{x, 0.0f, z};
+  m_translation = {m_planetCenter.x + x, 0.0f, m_planetCenter.z + z};
 }
