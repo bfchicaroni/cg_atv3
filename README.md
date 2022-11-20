@@ -206,10 +206,8 @@ private:
   m_camera.pan(m_panSpeed * deltaTime);
   ```
   
-- As classes ```planet.hpp``` e ```planet.cpp``` foram criadas para abstrair a configuração dos planetas e as funções referentes ao planetas. O arquivo ```planet.hpp``` contém a estrutura da classe ```Planet```, que possui essencialmente as funções ```create()```, ```paint()```, ```destroy()``` e ```update()```, e os atributos cor (m_color), tamanho (m_scale), posição (m_translate), velocidade (m_velocity), velocidade angular (m_angularVelocity) e escala (m_sceneScale).
+- A classe ```Planet``` foi criada para abstrair a configuração dos planetas e as funções referentes aos planetas. O arquivo ```planet.hpp``` contém a estrutura da classe ```Planet```, que possui essencialmente as funções ```create()```, ```paint()```, ```destroy()``` e ```update()```, e os atributos cor (m_color), tamanho (m_scale), posição (m_translate), velocidade (m_velocity), velocidade angular (m_angularVelocity) e escala (m_sceneScale).
 
-
- - ```planet.hpp```:
   ```c++
   #ifndef PLANET_HPP_
 #define PLANET_HPP_
@@ -260,21 +258,9 @@ private:
 
 #endif
   ```
- - ```planet.cpp```:
+ 
+ - O arquivo ```planet.cpp``` implementa as funções da classe ```Planet```. A função ```create()``` recebe as características do planeta como parâmetros e cria uma instância da classe com as características recebidas e o modelo do objeto ```sphere.obj``` . Gera o VBO e o EBO, cria o VAO, e atribui os vértices. Nas linhas baixo estão omitidas as linhas de geraç
   ```c++
-  #include "planet.hpp"
-
-#include <cstdio>
-#include <glm/gtx/fast_trigonometry.hpp>
-#include <unordered_map>
-
-// Explicit specialization of std::hash for Vertex
-template <> struct std::hash<Vertex> {
-  size_t operator()(Vertex const &vertex) const noexcept {
-    auto const h1{std::hash<glm::vec3>()(vertex.position)};
-    return h1;
-  }
-};
 
 void Planet::create(GLuint program, std::string assetsPath, float size,
                     glm::vec3 position, glm::vec4 color,
@@ -298,93 +284,16 @@ void Planet::create(GLuint program, std::string assetsPath, float size,
   loadModelFromFile(assetsPath + "sphere.obj");
 
   // Generate VBO
-  abcg::glGenBuffers(1, &m_VBO);
-  abcg::glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-  abcg::glBufferData(GL_ARRAY_BUFFER,
-                     sizeof(m_vertices.at(0)) * m_vertices.size(),
-                     m_vertices.data(), GL_STATIC_DRAW);
-  abcg::glBindBuffer(GL_ARRAY_BUFFER, 0);
-
   // Generate EBO
-  abcg::glGenBuffers(1, &m_EBO);
-  abcg::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
-  abcg::glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-                     sizeof(m_indices.at(0)) * m_indices.size(),
-                     m_indices.data(), GL_STATIC_DRAW);
-  abcg::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
   // Create VAO
-  abcg::glGenVertexArrays(1, &m_VAO);
-
   // Bind vertex attributes to current VAO
-  abcg::glBindVertexArray(m_VAO);
 
-  abcg::glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-  auto const positionAttribute{
-      abcg::glGetAttribLocation(m_program, "inPosition")};
-  abcg::glEnableVertexAttribArray(positionAttribute);
-  abcg::glVertexAttribPointer(positionAttribute, 3, GL_FLOAT, GL_FALSE,
-                              sizeof(Vertex), nullptr);
-  abcg::glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-  abcg::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
-
-  // End of binding to current VAO
-  abcg::glBindVertexArray(0);
 }
+```
 
-void Planet::loadModelFromFile(std::string_view path) {
-  tinyobj::ObjReader reader;
+- A função ```loadModelFromFile``` da classe ```Planet``` do projeto [LookAt](https://hbatagelo.github.io/cg/lookat.html) visto em sala de aula;
 
-  if (!reader.ParseFromFile(path.data())) {
-    if (!reader.Error().empty()) {
-      throw abcg::RuntimeError(
-          fmt::format("Failed to load model {} ({})", path, reader.Error()));
-    }
-    throw abcg::RuntimeError(fmt::format("Failed to load model {}", path));
-  }
-
-  if (!reader.Warning().empty()) {
-    fmt::print("Warning: {}\n", reader.Warning());
-  }
-
-  auto const &attributes{reader.GetAttrib()};
-  auto const &shapes{reader.GetShapes()};
-
-  m_vertices.clear();
-  m_indices.clear();
-
-  // A key:value map with key=Vertex and value=index
-  std::unordered_map<Vertex, GLuint> hash{};
-
-  // Loop over shapes
-  for (auto const &shape : shapes) {
-    // Loop over indices
-    for (auto const offset : iter::range(shape.mesh.indices.size())) {
-      // Access to vertex
-      auto const index{shape.mesh.indices.at(offset)};
-
-      // Vertex position
-      auto const startIndex{3 * index.vertex_index};
-      auto const vx{attributes.vertices.at(startIndex + 0)};
-      auto const vy{attributes.vertices.at(startIndex + 1)};
-      auto const vz{attributes.vertices.at(startIndex + 2)};
-
-      Vertex const vertex{.position = {vx, vy, vz}};
-
-      // If map doesn't contain this vertex
-      if (!hash.contains(vertex)) {
-        // Add this index (size of m_vertices)
-        hash[vertex] = m_vertices.size();
-        // Add this vertex
-        m_vertices.push_back(vertex);
-      }
-
-      m_indices.push_back(hash[vertex]);
-    }
-  }
-}
-
+ 
 void Planet::paint() {
   abcg::glUseProgram(m_program);
 
@@ -405,22 +314,6 @@ void Planet::paint() {
   abcg::glBindVertexArray(0);
 
   abcg::glUseProgram(0);
-}
-
-void Planet::destroy() {
-  abcg::glDeleteBuffers(1, &m_VBO);
-  abcg::glDeleteBuffers(1, &m_EBO);
-  abcg::glDeleteVertexArrays(1, &m_VAO);
-}
-
-void Planet::update() {
-  const double PI = 3.141592653589793238463;
-  float x = m_translation.x * cos(PI * m_angularVelocity / 180) -
-            m_translation.z * sin(PI * m_angularVelocity / 180);
-  float z = m_translation.z * cos(PI * m_angularVelocity / 180) +
-            m_translation.x * sin(PI * m_angularVelocity / 180);
-
-  m_translation = glm::vec3{x, 0.0f, z};
 }
   ```
 
