@@ -5,7 +5,7 @@ Este repositório se trata de um fork da biblioteca ABCG implementada pelo Dr. H
 Nome: Beatriz Favini Chicaroni  
  RA 11201721608
 
-Nome: Thais Amorim Souza
+Nome: Thais Amorim Souza  
  RA 11201810655
 
 ### Descrição do projeto
@@ -33,100 +33,9 @@ Nome: Thais Amorim Souza
   * [ ] Explorar os conceitos de texturização do Sistema Solar;
   * [ ] Explorar os conceitos de iluminação do Sistema Solar;
 
-- O objeto [sphere.obj](http://web.mit.edu/djwendel/www/weblogo/shapes/basic-shapes/sphere/sphere.obj) foi utilizado para representar todos os planetas e o Sol;
+- O objeto original ```sphere.obj```, que foi utilizado para representar todos os planetas e o Sol, está disponível [neste link](http://web.mit.edu/djwendel/www/weblogo/shapes/basic-shapes/sphere/sphere.obj) ;
 
-- Para a parte da câmera virtual deste projeto, foi utilizada a câmera implementada no projeto [LookAt](https://hbatagelo.github.io/cg/lookat.html) incluindo os comandos de controle da câmera com o teclado;
-
- Classe ```camera.hpp```:
- ```c++
- #ifndef CAMERA_HPP_
-#define CAMERA_HPP_
-
-#include <glm/mat4x4.hpp>
-#include <glm/vec3.hpp>
-
-class Camera {
-public:
-  void computeViewMatrix();
-  void computeProjectionMatrix(glm::vec2 const &size);
-
-  void dolly(float speed);
-  void truck(float speed);
-  void pan(float speed);
-
-  glm::mat4 const &getViewMatrix() const { return m_viewMatrix; }
-  glm::mat4 const &getProjMatrix() const { return m_projMatrix; }
-
-private:
-  glm::vec3 m_eye{0.0f, 0.5f, 2.5f}; // Camera position
-  glm::vec3 m_at{0.0f, 0.0f, 0.0f};  // Look-at point
-  glm::vec3 m_up{0.0f, 1.0f, 0.0f};  // "up" direction
-
-  // Matrix to change from world space to camera space
-  glm::mat4 m_viewMatrix;
-
-  // Matrix to change from camera space to clip space
-  glm::mat4 m_projMatrix;
-};
-
-#endif
- ```
- 
- Classe ```camera.cpp```:
- ```c++
- #include "camera.hpp"
-
-#include <glm/gtc/matrix_transform.hpp>
-
-void Camera::computeProjectionMatrix(glm::vec2 const &size) {
-  m_projMatrix = glm::mat4(1.0f);
-  auto const aspect{size.x / size.y};
-  m_projMatrix = glm::perspective(glm::radians(70.0f), aspect, 0.1f, 5.0f);
-}
-
-void Camera::computeViewMatrix() {
-  m_viewMatrix = glm::lookAt(m_eye, m_at, m_up);
-}
-
-void Camera::dolly(float speed) {
-  // Compute forward vector (view direction)
-  auto const forward{glm::normalize(m_at - m_eye)};
-
-  // Move eye and center forward (speed > 0) or backward (speed < 0)
-  m_eye += forward * speed;
-  m_at += forward * speed;
-
-  computeViewMatrix();
-}
-
-void Camera::truck(float speed) {
-  // Compute forward vector (view direction)
-  auto const forward{glm::normalize(m_at - m_eye)};
-  // Compute vector to the left
-  auto const left{glm::cross(m_up, forward)};
-
-  // Move eye and center to the left (speed < 0) or to the right (speed > 0)
-  m_at -= left * speed;
-  m_eye -= left * speed;
-
-  computeViewMatrix();
-}
-
-void Camera::pan(float speed) {
-  glm::mat4 transform{1.0f};
-
-  // Rotate camera around its local y axis
-  transform = glm::translate(transform, m_eye);
-  transform = glm::rotate(transform, -speed, m_up);
-  transform = glm::translate(transform, -m_eye);
-
-  m_at = transform * glm::vec4(m_at, 1.0f);
-
-  computeViewMatrix();
-}
- ```
- 
-  Controle da câmera com o teclado instanciado na classe ```Window.cpp```:
+- Para a parte da câmera virtual deste projeto, foi utilizada a câmera implementada no projeto [LookAt](https://hbatagelo.github.io/cg/lookat.html) incluindo os comandos de controle da câmera com o teclado. A classe câmera está implementada nos arquivos ```camera.hpp``` e ```camera.cpp```. O controle da câmera com o teclado está instanciado na classe ```Window.cpp``` nas linhas exibidas a seguir:
  ```c++
  void Window::onEvent(SDL_Event const &event) {
   if (event.type == SDL_KEYDOWN) {
