@@ -525,6 +525,13 @@ private:
 
 - Ideia da escala entre os planetas:
  <img src="https://github.com/bfchicaroni/cg_atv3/blob/master/examples/sistemaSolar/assets/1200px-Size_planets_comparison.jpg" width="800" height="450">
+ 
+- Para atualizar a taxa de atualização optamos por habilitar o modo Vsync (sincronização vertical) através da seguinte modificação em ```main.cpp```, geralmente limitando 60 Hz, para que tivessemos a mesma taxa tanto na versão desktop quanto na versão web:
+
+ ```c++
+ window.setOpenGLSettings(
+        {.samples = 4, .vSync = true, .doubleBuffering = true});
+ ```
 
 - Acesse a [Simulação na versão Web](https://bfchicaroni.github.io/cg_atividades/sistemaSolar/).
 
