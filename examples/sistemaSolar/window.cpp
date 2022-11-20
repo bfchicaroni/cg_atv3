@@ -96,6 +96,14 @@ void Window::onCreate() {
   // NEPTUNE
   neptune.create(m_program, assetsPath, 0.11f, {9.5f, 0.0f, 0.0f},
                  {0.0f, 0.4f, 0.8f, 1.0f}, 0.1f);
+
+  // JUPITER MOON
+  jupiterMoon.create(m_program, assetsPath, 0.05f, jupiter,
+                     {0.8f, 0.8f, 0.8f, 1.0f}, 3.0f, 0.7f);
+
+  // URANUS MOON
+  uranusMoon.create(m_program, assetsPath, 0.03f, uranus,
+                    {0.8f, 0.8f, 0.8f, 1.0f}, 6.0f, 0.5f);
 }
 
 void Window::onPaint() {
@@ -121,6 +129,9 @@ void Window::onPaint() {
   uranus.paint();
   neptune.paint();
 
+  jupiterMoon.paint();
+  uranusMoon.paint();
+
   abcg::glUseProgram(0);
 }
 
@@ -145,6 +156,9 @@ void Window::onDestroy() {
   saturn.destroy();
   uranus.destroy();
   neptune.destroy();
+
+  jupiterMoon.destroy();
+  uranusMoon.destroy();
 }
 
 void Window::onUpdate() {
@@ -158,6 +172,9 @@ void Window::onUpdate() {
   saturn.update();
   uranus.update();
   neptune.update();
+
+  jupiterMoon.update(jupiter);
+  uranusMoon.update(uranus);
 
   // Update camera
   m_camera.dolly(m_dollySpeed * deltaTime);

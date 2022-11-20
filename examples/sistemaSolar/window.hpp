@@ -4,6 +4,7 @@
 #include "abcgOpenGL.hpp"
 
 #include "camera.hpp"
+#include "moon.hpp"
 #include "planet.hpp"
 
 class Window : public abcg::OpenGLWindow {
@@ -42,6 +43,9 @@ private:
   Planet saturn;
   Planet uranus;
   Planet neptune;
+
+  Moon jupiterMoon;
+  Moon uranusMoon;
 };
 
 #endif
