@@ -30,6 +30,8 @@ Nome: Thais Amorim Souza
   * [ ] O comportamento de rotação das luas dos planetas;
   * [X] A ideia de escala entre os tamanhos dos elementos;
   * [X] Mostrar graficamente os elementos do Sistema Solar em uma perspectiva 3D;
+  * [ ] Explorar os conceitos de texturização do Sistema Solar;
+  * [ ] Explorar os conceitos de iluminação do Sistema Solar;
 
 - O objeto [sphere.obj](http://web.mit.edu/djwendel/www/weblogo/shapes/basic-shapes/sphere/sphere.obj) foi utilizado para representar todos os planetas e o Sol;
 
