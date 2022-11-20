@@ -25,11 +25,12 @@ public:
   GLuint m_VBO{};
   GLuint m_EBO{};
 
-  glm::vec4 m_color{1};
+  glm::vec4 m_color{};
   float m_scale{};
   glm::vec3 m_translation{};
   glm::vec3 m_velocity{};
   float m_angularVelocity{};
+  float m_sceneScale{0.2};
 
 private:
   GLuint m_program{};
