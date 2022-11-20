@@ -35,6 +35,7 @@ Nome: Thais Amorim Souza
 
 - O objeto original ```sphere.obj```, que foi utilizado para representar todos os planetas e o Sol, está disponível [neste link](http://web.mit.edu/djwendel/www/weblogo/shapes/basic-shapes/sphere/sphere.obj) ;
 
+- Os arquivos ```astros.frag``` e ```astros.vert``` são idênticos ao Vertex Shader e Fragment Shader do projeto [LookAt](https://hbatagelo.github.io/cg/lookat.html) visto em sala de aula;
 
  - A definição da classe ```window.hpp``` permanece similar ao que estudamos na sala de aula, com o adendo de algumas variaveis novas como as referente aos planetas e o Sol:
   ```c++
@@ -205,7 +206,8 @@ private:
   m_camera.pan(m_panSpeed * deltaTime);
   ```
   
-- As classes ```planet.hpp``` e ```planet.cpp``` foram criadas para abstrair a configuração dos planetas e as funções referentes ao planetas:
+- As classes ```planet.hpp``` e ```planet.cpp``` foram criadas para abstrair a configuração dos planetas e as funções referentes ao planetas. O arquivo ```planet.hpp``` contém a estrutura da classe ```Planet```, que possui essencialmente as funções ```create()```, ```paint()```, ```destroy()``` e ```update()```, e os atributos cor (m_color), tamanho (m_scale), posição (m_translate), velocidade (m_velocity), velocidade angular (m_angularVelocity) e escala (m_sceneScale).
+
 
  - ```planet.hpp```:
   ```c++
