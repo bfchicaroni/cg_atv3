@@ -20,14 +20,14 @@ Nome: Thais Amorim Souza
   * [X] Saturno;
   * [X] Urano;
   * [X] Netuno;
-  * [ ] Luas;
+  * [X] Luas;
   * [ ] Aneis de Saturno;
   * [ ] Universo Estrelado;
   * [ ] Asteroides;
 
 - Este projeto tem o proposito de simular:
   * [X] O comportamento de rotação dos planetas em relação ao Sol;
-  * [ ] O comportamento de rotação das luas dos planetas;
+  * [X] O comportamento de rotação das luas dos planetas;
   * [X] A ideia de escala entre os tamanhos dos elementos;
   * [X] Mostrar graficamente os elementos do Sistema Solar em uma perspectiva 3D;
   * [ ] Explorar os conceitos de texturização do Sistema Solar;
@@ -39,12 +39,13 @@ Nome: Thais Amorim Souza
 
  - A definição da classe ```window.hpp``` permanece similar ao que estudamos na sala de aula, com o adendo de algumas variaveis novas como as referente aos planetas e o Sol:
   ```c++
-  #ifndef WINDOW_HPP_
+#ifndef WINDOW_HPP_
 #define WINDOW_HPP_
 
 #include "abcgOpenGL.hpp"
 
 #include "camera.hpp"
+#include "moon.hpp"
 #include "planet.hpp"
 
 class Window : public abcg::OpenGLWindow {
@@ -83,6 +84,9 @@ private:
   Planet saturn;
   Planet uranus;
   Planet neptune;
+
+  Moon jupiterMoon;
+  Moon uranusMoon;
 };
 
 #endif
@@ -163,7 +167,7 @@ private:
   neptune.create(m_program, assetsPath, 0.11f, {9.5f, 0.0f, 0.0f},
                 {0.0f, 0.4f, 0.8f, 1.0f}, 0.1f);
   ```
- - Na função ```void Window::onPaint()``` da classe ```window.cpp``` sao chamadas as funções ```paint()``` dos planetas e Sol para pintar as esferas referente a eles:
+ - Na função ```void Window::onPaint()``` da classe ```window.cpp``` sao chamadas as funções ```paint()``` dos planetas, Sol e luas para pintar as esferas referente a eles:
   ```c++
   sun.paint();
   mercury.paint();
@@ -174,8 +178,11 @@ private:
   saturn.paint();
   uranus.paint();
   neptune.paint();
+  
+  jupiterMoon.paint();
+  uranusMoon.paint();
   ```
- - Na função ```void Window::onDestroy()``` da classe ```window.cpp``` sao chamadas as funções ```destroy()``` dos planetas e Sol para destruir as esferas referente a eles:
+ - Na função ```void Window::onDestroy()``` da classe ```window.cpp``` sao chamadas as funções ```destroy()``` dos planetas, Sol e luas para destruir as esferas referente a eles:
   ```c++
   sun.destroy();
   mercury.destroy();
@@ -186,8 +193,11 @@ private:
   saturn.destroy();
   uranus.destroy();
   neptune.destroy();
+  
+  jupiterMoon.destroy();
+  uranusMoon.destroy();
   ```
- - Na função ```void Window::onUpdate()``` da classe ```window.cpp``` sao chamadas as funções ```update()``` dos planetas e Sol para atualizar as esferas referente a eles:
+ - Na função ```void Window::onUpdate()``` da classe ```window.cpp``` sao chamadas as funções ```update()``` dos planetas, Sol e luas para atualizar as esferas referente a eles:
   ```c++
   mercury.update();
   venus.update();
@@ -197,6 +207,9 @@ private:
   saturn.update();
   uranus.update();
   neptune.update();
+  
+  jupiterMoon.update(jupiter);
+  uranusMoon.update(uranus);
   ```
  - A câmera é atualizada nesse mesmo bloco:
   ```c++
@@ -324,12 +337,129 @@ void Planet::paint() {
  ```c++
  void Planet::update() {
   const double PI = 3.141592653589793238463;
-  float x = m_translation.x * cos(PI * m_angularVelocity / 180) -
-            m_translation.z * sin(PI * m_angularVelocity / 180);
-  float z = m_translation.z * cos(PI * m_angularVelocity / 180) +
-            m_translation.x * sin(PI * m_angularVelocity / 180);
+  float thetha = PI * m_angularVelocity / 180;
+  float x = m_translation.x * cos(thetha) - m_translation.z * sin(thetha);
+  float z = m_translation.z * cos(thetha) + m_translation.x * sin(thetha);
 
   m_translation = glm::vec3{x, 0.0f, z};
+}
+ ```
+ 
+### Classe Moon
+
+- Criamos as luas dos planetas Urano e Jupiter na classe ```window.cpp```, os quais com a sua escala permitiam a visualização desses objetos na simulação do Sistema Solar implementado:
+```c++
+// JUPITER MOON
+  jupiterMoon.create(m_program, assetsPath, 0.05f, jupiter,
+                     {0.8f, 0.8f, 0.8f, 1.0f}, 3.0f, 0.7f);
+
+  // URANUS MOON
+  uranusMoon.create(m_program, assetsPath, 0.03f, uranus,
+                    {0.8f, 0.8f, 0.8f, 1.0f}, 6.0f, 0.5f);
+```
+- A classe ```Moon``` foi criada para abstrair a configuração das luas e as funções referentes as luas. 
+- O arquivo ```moon.hpp``` contém a estrutura da classe ```Moon```, que possui essencialmente as funções ```create()```, ```paint()```, ```destroy()``` e ```update(const Planet &planet)```, e os atributos cor (m_color), tamanho (m_scale), posição (m_translation), velocidade (m_velocity), velocidade angular (m_angularVelocity), escala (m_sceneScale) e centro do planeta(m_planetCenter).
+
+ ```c++
+ #ifndef MOON_HPP_
+#define MOON_HPP_
+
+#include <glm/fwd.hpp>
+#include <list>
+#include <random>
+
+#include "abcgOpenGL.hpp"
+#include "planet.hpp"
+
+struct VertexM {
+  glm::vec3 position;
+
+  friend bool operator==(VertexM const &, VertexM const &) = default;
+};
+
+class Moon {
+public:
+  void create(GLuint program, std::string assetsPath, float size,
+              Planet &planet, glm::vec4 color, float angularVelocity,
+              float radius);
+  void paint();
+  void destroy();
+  void update(const Planet &planet);
+
+  GLuint m_VAO{};
+  GLuint m_VBO{};
+  GLuint m_EBO{};
+
+  glm::vec4 m_color{};
+  float m_scale{};
+  glm::vec3 m_translation{};
+  glm::vec3 m_planetCenter{};
+  glm::vec3 m_velocity{};
+  float m_angularVelocity{};
+  float m_sceneScale{0.2};
+
+private:
+  GLuint m_program{};
+  GLint m_colorLoc{};
+  GLint m_translationLoc{};
+  GLint m_scaleLoc{};
+  GLint m_modelMatrixLoc{};
+
+  std::vector<VertexM> m_vertices;
+  std::vector<GLuint> m_indices;
+
+  void loadModelFromFile(std::string_view path);
+};
+
+#endif
+ ```
+ 
+- O arquivo ```moon.cpp``` implementa as funções da classe ```Moon```. A função ```create()``` recebe as características da lua como parâmetros e cria uma instância da classe com as características recebidas e o modelo do objeto ```sphere.obj``` . Gera o VBO e o EBO, cria o VAO, e atribui os vértices. Nas linhas abaixo estão omitidas as linhas de geração do VBO, EBO e VAO.
+  ```c++
+  void Moon::create(GLuint program, std::string assetsPath, float size,
+                  Planet &planet, glm::vec4 color, float angularVelocity,
+                  float radius)
+  ```
+ - A função ```loadModelFromFile()``` da classe ```Moon``` é idêntica à função de mesmo nome do projeto [LookAt](https://hbatagelo.github.io/cg/lookat.html) visto em sala de aula;
+
+- A função ```paint()``` é responsável por desenhar a instância da lua na posição, escala, e cor correspondentes.
+ ```c++
+ void Moon::paint() {
+  abcg::glUseProgram(m_program);
+
+  abcg::glBindVertexArray(m_VAO);
+
+  glm::mat4 model{1.0f};
+  glm::vec3 translate = {m_sceneScale * m_translation.x,
+                         m_sceneScale * m_translation.y,
+                         m_sceneScale * m_translation.z};
+  model = glm::translate(model, translate);
+  model = glm::scale(model, glm::vec3(m_sceneScale * m_scale));
+
+  abcg::glUniformMatrix4fv(m_modelMatrixLoc, 1, GL_FALSE, &model[0][0]);
+  abcg::glUniform4f(m_colorLoc, m_color.r, m_color.g, m_color.b, m_color.a);
+  abcg::glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT,
+                       nullptr);
+
+  abcg::glBindVertexArray(0);
+
+  abcg::glUseProgram(0);
+}
+ ```
+ 
+- A função ```void Moon::update(const Planet &planet)``` é responsável por atualizar a posição no espaço, para isso, ela pega a posição da lua no espaço, ve a posição da lua em relação ao planeta e atualiza as coordenadas polares da lua em relação ao planeta no espaço:
+
+ ```c++
+ void Moon::update(const Planet &planet) {
+  const double PI = 3.141592653589793238463;
+  double thetha = PI * m_angularVelocity / 180;
+  float xMoon = m_translation.x - m_planetCenter.x;
+  float zMoon = m_translation.z - m_planetCenter.z;
+  float x = xMoon * cos(thetha) - zMoon * sin(thetha);
+  float z = zMoon * cos(thetha) + xMoon * sin(thetha);
+  m_planetCenter = planet.m_translation;
+
+  m_translation = {m_planetCenter.x + x, 0.0f, m_planetCenter.z + z};
 }
  ```
 
