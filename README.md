@@ -134,7 +134,7 @@ private:
   }
 }
  ```
- - Todos os planetas, Sol e luas são criados na função ```void Window::onCreate()```; sendo passado parametros como: onde encontrar os arquivos ```.obj``` e ```.mtl```, local onde está os arquivos referente as texturas dos objetos, escala dos objetos carregados, suas respectivas velocidades angulares; na classe ```window.cpp```:
+ - Todos os planetas, Sol e luas são criados na função ```void Window::onCreate()```; sendo passado parametros como: onde encontrar os arquivos ```.obj``` e ```.mtl```, local onde estâo os arquivos referente as texturas dos objetos, escala dos objetos carregados e suas respectivas velocidades angulares; na classe ```window.cpp```:
   ```c++
   / SUN
   sun.create(assetsPath + "orbs/sun.obj",
