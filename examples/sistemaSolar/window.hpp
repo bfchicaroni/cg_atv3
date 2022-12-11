@@ -4,6 +4,7 @@
 #include "abcgOpenGL.hpp"
 #include "camera.hpp"
 #include "planet.hpp"
+#include "moon.hpp"
 
 class Window : public abcg::OpenGLWindow {
 protected:
@@ -27,6 +28,9 @@ private:
   Planet saturn;
   Planet uranus;
   Planet neptune;
+
+  Moon jupiterMoon;
+  Moon uranusMoon;
 
   GLint m_viewMatrixLocation{};
   GLint m_projMatrixLocation{};

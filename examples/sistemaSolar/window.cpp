@@ -97,6 +97,15 @@ void Window::onCreate() {
   neptune.create(assetsPath + "orbs/neptune.obj",
                  assetsPath + "maps/13908_Neptune_planet_diff.jpg", m_program,
                  0.11f, {9.5f, 0.0f, 0.0f}, 0.1f);
+
+  // JUPITER MOON
+  jupiterMoon.create(assetsPath + "orbs/moon.obj",
+                 assetsPath + "maps/moon-texture.jpeg", m_program, 0.05f, jupiter, 3.0f, 0.7f);
+
+  // URANUS MOON
+  uranusMoon.create(assetsPath + "orbs/moon.obj",
+                 assetsPath + "maps/moon-texture.jpeg", m_program, 0.03f, uranus, 6.0f, 0.5f);
+
   m_mappingMode = 3; // "From mesh" option
 }
 
@@ -130,6 +139,9 @@ void Window::onPaint() {
   uranus.paint(uranus.getNumTriangles());
   neptune.paint(neptune.getNumTriangles());
 
+  jupiterMoon.paint(jupiterMoon.getNumTriangles());
+  uranusMoon.paint(uranusMoon.getNumTriangles());
+
   auto const aspect{gsl::narrow<float>(m_viewportSize.x) /
                     gsl::narrow<float>(m_viewportSize.y)};
   m_projMatrix = glm::perspective(glm::radians(45.0f), aspect, 0.1f, 5.0f);
@@ -148,6 +160,9 @@ void Window::onUpdate() {
   saturn.update();
   uranus.update();
   neptune.update();
+
+  jupiterMoon.update(jupiter);
+  uranusMoon.update(uranus);
 
   // m_viewMatrix =
   //     glm::lookAt(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f),
@@ -177,6 +192,9 @@ void Window::onDestroy() {
   saturn.destroy();
   uranus.destroy();
   neptune.destroy();
+
+  jupiterMoon.destroy();
+  uranusMoon.destroy();
 
   abcg::glDeleteProgram(m_program);
 }
