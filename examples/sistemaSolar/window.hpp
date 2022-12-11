@@ -2,37 +2,21 @@
 #define WINDOW_HPP_
 
 #include "abcgOpenGL.hpp"
-
 #include "camera.hpp"
-#include "moon.hpp"
 #include "planet.hpp"
 
 class Window : public abcg::OpenGLWindow {
 protected:
   void onEvent(SDL_Event const &event) override;
   void onCreate() override;
+  void onUpdate() override;
   void onPaint() override;
   void onPaintUI() override;
   void onResize(glm::ivec2 const &size) override;
   void onDestroy() override;
-  void onUpdate() override;
 
 private:
   glm::ivec2 m_viewportSize{};
-
-  GLuint m_VAO{};
-  GLuint m_VBO{};
-  GLuint m_EBO{};
-  GLuint m_program{};
-
-  GLint m_viewMatrixLocation{};
-  GLint m_projMatrixLocation{};
-  GLint m_colorLocation{};
-
-  Camera m_camera;
-  float m_dollySpeed{};
-  float m_truckSpeed{};
-  float m_panSpeed{};
 
   Planet sun;
   Planet mercury;
@@ -44,8 +28,25 @@ private:
   Planet uranus;
   Planet neptune;
 
-  Moon jupiterMoon;
-  Moon uranusMoon;
+  GLint m_viewMatrixLocation{};
+  GLint m_projMatrixLocation{};
+
+  Camera m_camera;
+  float m_dollySpeed{};
+  float m_truckSpeed{};
+  float m_panSpeed{};
+
+  glm::mat4 m_modelMatrix{1.0f};
+  glm::mat4 m_viewMatrix{1.0f};
+  glm::mat4 m_projMatrix{1.0f};
+
+  GLuint m_program{};
+
+  // Mapping mode
+  // 0: triplanar; 1: cylindrical; 2: spherical; 3: from mesh
+  int m_mappingMode{};
+
+  void loadModel(std::string_view path);
 };
 
 #endif
