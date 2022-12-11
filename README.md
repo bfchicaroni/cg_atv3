@@ -33,7 +33,7 @@ Nome: Thais Amorim Souza
   * [X] Explorar os conceitos de texturização do Sistema Solar;
   * [ ] Explorar os conceitos de iluminação do Sistema Solar;
 
-- Os arquivos ```.obj```, ```.mtl``` e ```,jpg```, que foram utilizados para representar todos os planetas e o Sol; e suas respectivas texturas, estam disponíveis em [neste repo](https://github.com/keynekassapa13/solar-system/tree/master/COSC3000/resources/models), exceto pela [textura da Terra](https://www.solarsystemscope.com/textures/);
+- Os arquivos ```.obj```, ```.mtl``` e ```.jpg```, que foram utilizados para representar todos os planetas e o Sol; e suas respectivas texturas, estam disponíveis em [neste repo](https://github.com/keynekassapa13/solar-system/tree/master/COSC3000/resources/models), exceto pela [textura da Terra](https://www.solarsystemscope.com/textures/);
 
 - Os arquivos ```texture.frag``` e ```texture.vert``` são idênticos ao Vertex Shader e Fragment Shader do projeto [Viewer4](https://hbatagelo.github.io/cg/viewer4.html) visto em sala de aula;
 
