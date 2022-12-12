@@ -1,6 +1,6 @@
 # Sistema Solar
 
-Este repositório se trata de um fork da biblioteca ABCG implementada pelo Dr. Harlen Batagelo, aqui foi implementado uma simulação do sistema solar para a fixação dos conceitos aprendidos na matéria MCTA008-17 Computação Gráfica. 
+Este repositório se trata de um fork da biblioteca ABCG implementada pelo Dr. Harlen Batagelo, aqui foi implementada uma simulação do sistema solar para a fixação dos conceitos aprendidos na matéria MCTA008-17 Computação Gráfica. 
 ## Autores:
 Nome: Beatriz Favini Chicaroni  
  RA 11201721608
@@ -10,7 +10,7 @@ Nome: Thais Amorim Souza
 
 ### Descrição do projeto
 
-- O nosso sistema solar contem os seguintes elementos:
+- O nosso sistema solar contém os seguintes elementos:
   * [X] Sol;
   * [X] Mercúrio;
   * [X] Vênus;
@@ -25,7 +25,7 @@ Nome: Thais Amorim Souza
   * [ ] Universo Estrelado;
   * [ ] Asteroides;
 
-- Este projeto tem o proposito de simular:
+- Este projeto tem o propósito de simular:
   * [X] O comportamento de rotação dos planetas em relação ao Sol;
   * [X] O comportamento de rotação das luas dos planetas;
   * [X] A ideia de escala entre os tamanhos dos elementos;
@@ -33,11 +33,11 @@ Nome: Thais Amorim Souza
   * [X] Explorar os conceitos de texturização do Sistema Solar;
   * [ ] Explorar os conceitos de iluminação do Sistema Solar;
 
-- Os arquivos ```.obj```, ```.mtl``` e ```.jpg```, que foram utilizados para representar todos os planetas e o Sol; e suas respectivas texturas, estam disponíveis em [neste repo](https://github.com/keynekassapa13/solar-system/tree/master/COSC3000/resources/models), exceto pela [textura da Terra](https://www.solarsystemscope.com/textures/);
+- Os arquivos ```.obj```, ```.mtl``` e ```.jpg```, que foram utilizados para representar todos os planetas e o Sol; e suas respectivas texturas, estão disponíveis [nesse repositório](https://github.com/keynekassapa13/solar-system/tree/master/COSC3000/resources/models), exceto pela [textura da Terra](https://www.solarsystemscope.com/textures/);
 
 - Os arquivos ```texture.frag``` e ```texture.vert``` são idênticos ao Vertex Shader e Fragment Shader do projeto [Viewer4](https://hbatagelo.github.io/cg/viewer4.html) visto em sala de aula;
 
- - A definição da classe ```window.hpp``` permanece similar ao que estudamos na sala de aula, com o adendo de algumas variaveis novas como as referente aos planetas, Sol e luas dos planetas:
+ - A definição da classe ```window.hpp``` permanece similar ao que estudamos na sala de aula, com o adendo de algumas variáveis novas como as referentes aos planetas, Sol e luas dos planetas:
   ```c++
 #ifndef WINDOW_HPP_
 #define WINDOW_HPP_
@@ -130,7 +130,7 @@ private:
   }
 }
  ```
- - Todos os planetas, Sol e luas são criados na função ```void Window::onCreate()```; sendo passado parametros como: onde encontrar os arquivos ```.obj``` e ```.mtl```, local onde estâo os arquivos referente as texturas dos objetos, escala dos objetos carregados e suas respectivas velocidades angulares; na classe ```window.cpp```:
+ - Todos os planetas, Sol e luas são criados na função ```void Window::onCreate()``` utilizando a função ```void Planet::create``` cujos parâmetros recebidos são: localização do arquivo ```.obj```, localização do arquivo de imagem referente às texturas dos objetos, shaders, escala do objeto, posição inicial e velocidade angular.
   ```c++
   / SUN
   sun.create(assetsPath + "orbs/sun.obj",
@@ -184,7 +184,7 @@ private:
   uranusMoon.create(assetsPath + "orbs/moon.obj",
                  assetsPath + "maps/moon-texture.jpeg", m_program, 0.03f, uranus, 6.0f, 0.5f);
   ```
- - Na função ```void Window::onPaint()``` da classe ```window.cpp``` sao chamadas as funções ```paint()``` dos planetas, Sol e luas para pintar com texturização os objetos referente a eles:
+ - Na função ```void Window::onPaint()``` da classe ```window.cpp``` são chamadas as funções ```paint()``` dos planetas, Sol e luas para pintar com texturização os objetos referentes a eles:
   ```c++
   sun.paint(sun.getNumTriangles());
   mercury.paint(mercury.getNumTriangles());
@@ -199,7 +199,7 @@ private:
   jupiterMoon.paint(jupiterMoon.getNumTriangles());
   uranusMoon.paint(uranusMoon.getNumTriangles());
   ```
- - Na função ```void Window::onDestroy()``` da classe ```window.cpp``` sao chamadas as funções ```destroy()``` dos planetas, Sol e luas para destruir os objetos rederizados referente a eles:
+ - Na função ```void Window::onDestroy()``` da classe ```window.cpp``` são chamadas as funções ```destroy()``` dos planetas, Sol e luas para destruir os objetos renderizados referentes a eles:
   ```c++
   sun.destroy();
   mercury.destroy();
@@ -214,7 +214,7 @@ private:
   jupiterMoon.destroy();
   uranusMoon.destroy();
   ```
- - Na função ```void Window::onUpdate()``` da classe ```window.cpp``` sao chamadas as funções ```update()``` dos planetas, Sol e luas para atualizar a localização dos objetos referente a eles:
+ - Na função ```void Window::onUpdate()``` da classe ```window.cpp``` são chamadas as funções ```update()``` dos planetas, Sol e luas para atualizar a localização dos objetos referentes a eles:
   ```c++
   mercury.update();
   venus.update();
@@ -633,9 +633,11 @@ private:
 #endif
  ```
  
-- O arquivo ```moon.cpp``` implementa as funções da classe ```Moon```. A função ```create()``` recebe as características da lua como parâmetros e cria uma instância da classe com as características recebidas, o modelo do objeto e suas proriedades e sua texturização. Gera o VBO e o EBO, cria o VAO, e atribui os vértices.  A geração do VBO, EBO e VAO ocorre na função ```void Moon::createBuffers()```. Essa classe foi criada utilizando como base a classe ```model.cpp``` do projeto [Viewer4](https://hbatagelo.github.io/cg/viewer4.html) visto em sala de aula e similar a função ```create()``` da classe ```Planet.cpp```
+- O arquivo ```moon.cpp``` implementa as funções da classe ```Moon```. Essa classe também foi criada utilizando como base a classe ```model.cpp``` do projeto [Viewer4](https://hbatagelo.github.io/cg/viewer4.html) visto em sala de aula.
 
-- A função ```paint()``` é responsável por desenhar a instância da lua na posição, escala e textura correspondente. E ela é similar a função ```paint()``` da classe ```Planet.cpp```;
+- A função ```create()``` é similar à função ```create()``` da classe ```Planet.cpp```. Ela recebe as características da lua como parâmetros e cria uma instância da classe com as características recebidas, o modelo do objeto, suas proriedades e sua texturização. Gera o VBO e o EBO, cria o VAO, e atribui os vértices.  A geração do VBO, EBO e VAO ocorre na função ```void Moon::createBuffers()```.
+
+- A função ```paint()``` é responsável por desenhar a instância da lua na posição, escala e textura correspondente. Ela é similar a função ```paint()``` da classe ```Planet.cpp```;
 
 - A função ```void Moon::update(const Planet &planet)``` é responsável por atualizar a posição no espaço, para isso, ela pega a posição da lua no espaço, ve a posição da lua em relação ao planeta e atualiza as coordenadas polares da lua em relação ao planeta no espaço:
 
