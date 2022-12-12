@@ -90,8 +90,6 @@ private:
   // Mapping mode
   // 0: triplanar; 1: cylindrical; 2: spherical; 3: from mesh
   int m_mappingMode{};
-
-  void loadModel(std::string_view path);
 };
 
 #endif
