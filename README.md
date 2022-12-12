@@ -871,7 +871,7 @@ private:
         {.samples = 4, .vSync = true, .doubleBuffering = true});
  ```
 
-- Acesse a [Simulação na versão Web](https://bfchicaroni.github.io/cg_atividades/sistemaSolar/).
+- Acesse a [Simulação na versão Web](https://bfchicaroni.github.io/cg_atividades/sistemaSolar_v2/).
 
 
 
