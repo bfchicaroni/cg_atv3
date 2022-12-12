@@ -236,7 +236,7 @@ private:
   m_camera.pan(m_panSpeed * deltaTime);
   ```
   
-  #### Classe Planet
+  ### Classe Planet
 - A classe ```Planet``` foi criada para abstrair a configuração dos planetas e as funções referentes aos planetas. 
 - O arquivo ```planet.hpp``` contém a estrutura da classe ```Planet```, que possui essencialmente as funções ```create()```, ```paint()```, ```destroy()``` e ```update()```, e os atributos tamanho (m_scale), posição (m_translation), velocidade (m_velocity), velocidade angular (m_angularVelocity) e escala (m_sceneScale).
 
@@ -305,7 +305,8 @@ private:
 #endif
   ```
  
- - O arquivo ```planet.cpp``` implementa as funções da classe ```Planet```. A função ```create()``` recebe as características do planeta como parâmetros e cria uma instância da classe com as características recebidas, o modelo do objeto e suas propriedades e carrega a sua texturização. Gera o VBO e o EBO, cria o VAO, e atribui os vértices. A geração do VBO, EBO e VAO ocorre na função ```void Planet::createBuffers()```. Essa classe foi criada utilizando como base a classe ```model.cpp``` do projeto [Viewer4](https://hbatagelo.github.io/cg/viewer4.html) visto em sala de aula:
+ - O arquivo ```planet.cpp``` implementa as funções da classe ```Planet```. Essa classe foi criada utilizando como base a classe ```model.cpp``` do projeto [Viewer4](https://hbatagelo.github.io/cg/viewer4.html) visto em sala de aula. 
+ - A função ```create()``` recebe as características do planeta como parâmetros, cria uma instância da classe com as características recebidas. Inicialmente aplica o deslocamento inicial e a escala ao modelo:
   ```c++
 
 void Planet::create(std::string_view path, std::string_view pathTexture,
@@ -322,12 +323,18 @@ void Planet::create(std::string_view path, std::string_view pathTexture,
   m_scale = size;
   m_velocity = glm::vec3(0.5, 0, 0);
   m_angularVelocity = angularVelocity;
+```
+- Em seguida gera um modelo de textura difusa para o planeta através do arquivo de imagem passado como parâmetro:
+```c++
 
   if (!std::filesystem::exists(pathTexture))
     return;
 
   abcg::glDeleteTextures(1, &m_diffuseTexture);
   m_diffuseTexture = abcg::loadOpenGLTexture({.path = pathTexture});
+```
+- Depois carrega a textura difusa, o modelo do objeto e suas propriedades.
+```c++
 
   auto const basePath{std::filesystem::path{path}.parent_path().string() + "/"};
 
@@ -433,6 +440,9 @@ void Planet::create(std::string_view path, std::string_view pathTexture,
     }
 
     createBuffers();
+```
+- A geração do VBO, EBO e VAO ocorre na função ```void Planet::createBuffers()```. E por último, o VAO é configurado:  
+```c++
 
     // Release previous VAO
     abcg::glDeleteVertexArrays(1, &m_VAO);
