@@ -40,8 +40,6 @@ private:
   float m_truckSpeed{};
   float m_panSpeed{};
 
-  glm::mat4 m_modelMatrix{1.0f};
-  glm::mat4 m_viewMatrix{1.0f};
   glm::mat4 m_projMatrix{1.0f};
 
   GLuint m_program{};
@@ -49,8 +47,6 @@ private:
   // Mapping mode
   // 0: triplanar; 1: cylindrical; 2: spherical; 3: from mesh
   int m_mappingMode{};
-
-  void loadModel(std::string_view path);
 };
 
 #endif
