@@ -80,9 +80,7 @@ private:
   float m_dollySpeed{};
   float m_truckSpeed{};
   float m_panSpeed{};
-
-  glm::mat4 m_modelMatrix{1.0f};
-  glm::mat4 m_viewMatrix{1.0f};
+  
   glm::mat4 m_projMatrix{1.0f};
 
   GLuint m_program{};
