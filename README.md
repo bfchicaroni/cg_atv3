@@ -623,9 +623,9 @@ private:
 #endif
  ```
  
-- O arquivo ```moon.cpp``` implementa as funções da classe ```Moon```. A função ```create()``` recebe as características da lua como parâmetros e cria uma instância da classe com as características recebidas, o modelo do objeto e suas proriedades e sua texturização. Gera o VBO e o EBO, cria o VAO, e atribui os vértices.  A geração do VBO, EBO e VAO ocorre na função ```void Moon::createBuffers()```. Essa classe foi criada utilizando como base a classe ```model.cpp``` do projeto [Viewer4](https://hbatagelo.github.io/cg/viewer4.html) visto em sala de aula e similar a função ´´´create()´´´ da classe ´´´Planet.cpp´´´
+- O arquivo ```moon.cpp``` implementa as funções da classe ```Moon```. A função ```create()``` recebe as características da lua como parâmetros e cria uma instância da classe com as características recebidas, o modelo do objeto e suas proriedades e sua texturização. Gera o VBO e o EBO, cria o VAO, e atribui os vértices.  A geração do VBO, EBO e VAO ocorre na função ```void Moon::createBuffers()```. Essa classe foi criada utilizando como base a classe ```model.cpp``` do projeto [Viewer4](https://hbatagelo.github.io/cg/viewer4.html) visto em sala de aula e similar a função ```create()``` da classe ```Planet.cpp```
 
-- A função ```paint()``` é responsável por desenhar a instância da lua na posição, escala e textura correspondente. E ela é similar a função ´´´paint()´´´ da classe ´´´Planet.cpp´´´
+- A função ```paint()``` é responsável por desenhar a instância da lua na posição, escala e textura correspondente. E ela é similar a função ```paint()``` da classe ```Planet.cpp```;
 
 - A função ```void Moon::update(const Planet &planet)``` é responsável por atualizar a posição no espaço, para isso, ela pega a posição da lua no espaço, ve a posição da lua em relação ao planeta e atualiza as coordenadas polares da lua em relação ao planeta no espaço:
 
